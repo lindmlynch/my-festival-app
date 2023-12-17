@@ -16,4 +16,13 @@
     <string name="menu_deleteFestival">Delete</string>
     <string name="action_festival">Add</string>
     <string name="action_list">List</string>
+    <string name="action_share">Share</string>
+    <string name="action_send">Send</string>
+    <string name="group_communicate">Communicate</string>
+    <string name="nav_header_title">My Festival</string>
+    <string name="nav_header_subtitle">Add Your Festivals</string>
+    <string name="nav_header_desc">Navigation header</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

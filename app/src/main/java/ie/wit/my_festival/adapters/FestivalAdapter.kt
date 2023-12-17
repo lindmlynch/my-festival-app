@@ -12,9 +12,10 @@ interface FestivalListener {
     fun onFestivalClick(festival: FestivalModel, position : Int)
 }
 
-class FestivalAdapter constructor(private var festivals: List<FestivalModel>,
-                                  private val listener: FestivalListener) :
-    RecyclerView.Adapter<FestivalAdapter.MainHolder>() {
+class FestivalAdapter constructor(
+    private var festivals: List<FestivalModel>,
+    private val listener: FestivalListener? = null
+) : RecyclerView.Adapter<FestivalAdapter.MainHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainHolder {
         val binding = CardFestivalBinding
@@ -24,24 +25,27 @@ class FestivalAdapter constructor(private var festivals: List<FestivalModel>,
     }
 
     override fun onBindViewHolder(holder: MainHolder, position: Int) {
-        val festival = festivals[holder.adapterPosition]
+        val festival = festivals[position] // Use position instead of holder.adapterPosition
         holder.bind(festival, listener)
     }
 
     override fun getItemCount(): Int = festivals.size
 
-    class MainHolder(private val binding : CardFestivalBinding) :
+    class MainHolder(private val binding: CardFestivalBinding) :
         RecyclerView.ViewHolder(binding.root) {
 
-        fun bind(festival: FestivalModel, listener:FestivalListener) {
+        fun bind(festival: FestivalModel, listener: FestivalListener?) {
             binding.festivalTitle.text = festival.title
             binding.description.text = festival.description
             binding.date.text = festival.date
             binding.valueForMoney.rating = festival.valueForMoney
             binding.accessibility.rating = festival.accessibility
             binding.familyFriendly.rating = festival.familyFriendly
-            Picasso.get().load(festival.image).resize(200,200).into(binding.imageIcon)
-            binding.root.setOnClickListener { listener.onFestivalClick(festival,adapterPosition) }
+            Picasso.get().load(festival.image).resize(200, 200).into(binding.imageIcon)
+
+            binding.root.setOnClickListener {
+                listener?.onFestivalClick(festival, adapterPosition)
+            }
         }
     }
 }
