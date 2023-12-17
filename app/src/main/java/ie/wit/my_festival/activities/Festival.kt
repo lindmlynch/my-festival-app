@@ -115,13 +115,15 @@ class Festival : AppCompatActivity() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.item_delete -> {
-                setResult(99)
-                app.festivals.delete(festival)
-                finish()
-            }        R.id.item_cancel -> { finish() }
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        return when (item.itemId) {
+            R.id.action_list -> {
+                startActivity(Intent(this, List::class.java))
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
-        return super.onOptionsItemSelected(item)
     }
 }

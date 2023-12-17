@@ -39,13 +39,13 @@ class List : AppCompatActivity(), FestivalListener {
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.menu_main, menu)
+        menuInflater.inflate(R.menu.menu_list, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.item_add -> {
+            R.id.action_festival -> {
                 val launcherIntent = Intent(this, Festival::class.java)
                 getResult.launch(launcherIntent)
             }

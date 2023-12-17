@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Festival</string>
+    <string name="app_name">My Festival</string>
     <string name="button_addFestival">Add Festival</string>
     <string name="hint_festivalTitle">Festival Title</string>
     <string name="hint_festivalDescription">Description</string>
@@ -14,4 +14,6 @@
     <string name="button_location">Set Location</string>
     <string name="title_activity_map">MapActivity</string>
     <string name="menu_deleteFestival">Delete</string>
+    <string name="action_festival">Add</string>
+    <string name="action_list">List</string>
 </resources>

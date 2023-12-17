@@ -3,9 +3,8 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/action_list"
+        android:id="@+id/action_festival"
         android:orderInCategory="100"
-        android:title="@string/action_list"
+        android:title="@string/action_festival"
         app:showAsAction="never" />
 </menu>
-
