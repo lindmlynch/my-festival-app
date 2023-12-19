@@ -1,37 +1,38 @@
-package ie.wit.my_festival.fragments
+package ie.wit.my_festival.ui.festival
 
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
-import androidx.navigation.findNavController
-import androidx.navigation.ui.NavigationUI
+import androidx.lifecycle.ViewModelProvider
 import com.squareup.picasso.Picasso
 import ie.wit.my_festival.R
 import ie.wit.my_festival.databinding.FragmentFestivalBinding
 import androidx.activity.result.ActivityResultLauncher
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
+import androidx.lifecycle.Lifecycle
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.NavigationUI
 import ie.wit.my_festival.helpers.showImagePicker
-import ie.wit.my_festival.main.FestivalApp
 import ie.wit.my_festival.models.FestivalModel
 import timber.log.Timber
 import timber.log.Timber.Forest.i
 
 class FestivalFragment : Fragment() {
 
-    lateinit var app: FestivalApp
+
     private var _fragBinding: FragmentFestivalBinding? = null
     private val fragBinding get() = _fragBinding!!
     private lateinit var imageIntentLauncher: ActivityResultLauncher<Intent>
+    private lateinit var viewModel: FestivalViewModel
+
     var festival = FestivalModel()
     var edit = false
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        app = activity?.application as FestivalApp
-        setHasOptionsMenu(true)
-    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,37 +41,34 @@ class FestivalFragment : Fragment() {
 
         _fragBinding = FragmentFestivalBinding.inflate(inflater, container, false)
         val root = fragBinding.root
+        viewModel = ViewModelProvider(this).get(FestivalViewModel::class.java)
         activity?.title = getString(R.string.enter_festival_title)
+        setupMenu()
 
-        if (requireActivity().intent.hasExtra("festival_edit")) {
+        if (arguments?.containsKey("festival_edit") == true) {
             edit = true
-            festival = requireActivity().intent.extras?.getParcelable("festival_edit")!!
-            fragBinding.festivalTitle.setText(festival.title)
-            fragBinding.description.setText(festival.description)
-            fragBinding.date.setText(festival.date)
-            fragBinding.valueForMoney.rating = festival.valueForMoney
-            fragBinding.accessibility.rating = festival.accessibility
-            fragBinding.familyFriendly.rating = festival.familyFriendly
-            fragBinding.btnAdd.setText(R.string.save_festival)
-            Picasso.get()
-                .load(festival.image)
-                .into(fragBinding.festivalImage)
-            if (festival.image != Uri.EMPTY) {
-                fragBinding.chooseImage.setText(R.string.change_festival_image)
-            }
+            festival = arguments?.getParcelable("festival_edit") ?: FestivalModel()
+
+            viewModel.setFestival(festival)
+            viewModel.festival.observe(viewLifecycleOwner, { festival ->
+                fragBinding.festivalTitle.setText(festival.title)
+                fragBinding.description.setText(festival.description)
+                fragBinding.date.setText(festival.date)
+                fragBinding.valueForMoney.rating = festival.valueForMoney
+                fragBinding.accessibility.rating = festival.accessibility
+                fragBinding.familyFriendly.rating = festival.familyFriendly
+                fragBinding.btnAdd.setText(R.string.save_festival)
+                Picasso.get().load(festival.image).into(fragBinding.festivalImage)
+                if (festival.image != Uri.EMPTY) {
+                    fragBinding.chooseImage.setText(R.string.change_festival_image)
+                }
+            })
         }
 
         setButtonListener(fragBinding)
         registerImagePickerCallback()
 
         return root
-    }
-
-    companion object {
-        @JvmStatic
-        fun newInstance() = FestivalFragment().apply {
-            arguments = Bundle().apply {}
-        }
     }
 
     private fun setButtonListener(layout: FragmentFestivalBinding) {
@@ -85,14 +83,12 @@ class FestivalFragment : Fragment() {
                 Timber.i("Enter festival title")
             } else {
                 if (edit) {
-                    app.festivals.update(festival.copy())
+                    viewModel.updateFestival(festival.copy())
                 } else {
-                    app.festivals.create(festival.copy())
+                    viewModel.createFestival(festival.copy())
                 }
-                // Return to ListFragment after saving
                 findNavController().navigate(R.id.action_festivalFragment_to_listFragment)
             }
-
         }
 
         layout.chooseImage.setOnClickListener {
@@ -116,9 +112,7 @@ class FestivalFragment : Fragment() {
                             )
                             festival.image = image
 
-                            Picasso.get()
-                                .load(festival.image)
-                                .into(fragBinding.festivalImage)
+                            Picasso.get().load(festival.image).into(fragBinding.festivalImage)
                             fragBinding.chooseImage.setText(R.string.change_festival_image)
                         }
                     }
@@ -130,15 +124,20 @@ class FestivalFragment : Fragment() {
             }
     }
 
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_festival, menu)
-        if (edit) menu.getItem(0).isVisible = true
-        super.onCreateOptionsMenu(menu, inflater)
-    }
+    private fun setupMenu() {
+        (requireActivity() as MenuHost).addMenuProvider(object : MenuProvider {
+            override fun onPrepareMenu(menu: Menu) {
+                // Handle for example visibility of menu items
+            }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return NavigationUI.onNavDestinationSelected(item, requireView().findNavController())
-                || super.onOptionsItemSelected(item)
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.menu_festival, menu)
+            }
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                // Validate and handle the selected menu item
+                return NavigationUI.onNavDestinationSelected(menuItem,
+                    requireView().findNavController())
+            }     }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     override fun onDestroyView() {

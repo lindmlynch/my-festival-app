@@ -8,7 +8,7 @@ internal fun getId(): Long {
     return lastId++
 }
 
-class FestivalMemStore : FestivalStore {
+object FestivalManager : FestivalStore {
 
     val festivals = ArrayList<FestivalModel>()
 

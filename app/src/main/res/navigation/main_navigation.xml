@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/listFragment"
-        android:name="ie.wit.my_festival.fragments.ListFragment"
+        android:name="ie.wit.my_festival.ui.list.ListFragment"
         android:label="List"
         tools:layout="@layout/fragment_list" >
         <action
@@ -18,7 +18,7 @@
     </fragment>
     <fragment
         android:id="@+id/festivalFragment"
-        android:name="ie.wit.my_festival.fragments.FestivalFragment"
+        android:name="ie.wit.my_festival.ui.festival.FestivalFragment"
         android:label="Festival"
         tools:layout="@layout/fragment_festival" >
         <action
