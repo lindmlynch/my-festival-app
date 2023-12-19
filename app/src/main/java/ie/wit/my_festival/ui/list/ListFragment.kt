@@ -1,4 +1,4 @@
-// ListFragment.kt
+
 package ie.wit.my_festival.ui.list
 
 import android.os.Bundle
@@ -6,28 +6,31 @@ import android.view.*
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import ie.wit.my_festival.R
 import ie.wit.my_festival.adapters.FestivalAdapter
+import ie.wit.my_festival.adapters.FestivalListener
 import ie.wit.my_festival.databinding.FragmentListBinding
 import ie.wit.my_festival.main.FestivalApp
+import ie.wit.my_festival.models.FestivalModel
 
-class ListFragment : Fragment() {
+class ListFragment : Fragment(), FestivalListener {
 
     lateinit var app: FestivalApp
     private var _fragBinding: FragmentListBinding? = null
     private val fragBinding get() = _fragBinding!!
 
-    private val viewModel: ListViewModel by viewModels()
+    private lateinit var listViewModel: ListViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(
@@ -36,17 +39,20 @@ class ListFragment : Fragment() {
     ): View? {
         _fragBinding = FragmentListBinding.inflate(inflater, container, false)
         val root = fragBinding.root
-        activity?.title = getString(R.string.action_list)
+        setupMenu()
+        fragBinding.recyclerView.layoutManager = LinearLayoutManager(activity)
+        listViewModel = ViewModelProvider(this).get(ListViewModel::class.java)
+        listViewModel.observableFestivalsList.observe(viewLifecycleOwner, Observer {
 
-        val layoutManager = LinearLayoutManager(requireContext())
-        fragBinding.recyclerView.layoutManager = layoutManager
-
-        val adapter = FestivalAdapter(emptyList(), null)
-        fragBinding.recyclerView.adapter = adapter
-
-        viewModel.observableFestivalsList.observe(viewLifecycleOwner, { festivals ->
-            adapter.updateData(festivals)
+                festivals ->
+            festivals?.let { render(festivals) }
         })
+
+        val fab: FloatingActionButton = fragBinding.fab
+        fab.setOnClickListener {
+            val action = ListFragmentDirections.actionListFragmentToFestivalFragment()
+            findNavController().navigate(action)
+        }
 
         return root
     }
@@ -67,9 +73,23 @@ class ListFragment : Fragment() {
             }     }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
+    private fun render(festivals: List<FestivalModel>) {
+        fragBinding.recyclerView.adapter = FestivalAdapter(festivals,this)
+        if (festivals.isEmpty()) {
+            fragBinding.recyclerView.visibility = View.GONE
+            fragBinding.festivalsNotFound.visibility = View.VISIBLE
+        } else {
+            fragBinding.recyclerView.visibility = View.VISIBLE
+            fragBinding.festivalsNotFound.visibility = View.GONE
+        }
+    }
+
+    override fun onFestivalClick(festival: FestivalModel, position: Int) {
+        
+    }
     override fun onResume() {
         super.onResume()
-        viewModel.load()
+        listViewModel.load()
     }
 
     override fun onDestroyView() {

@@ -31,10 +31,6 @@ class FestivalAdapter constructor(
 
     override fun getItemCount(): Int = festivals.size
 
-    fun updateData(newData: List<FestivalModel>) {
-        festivals = newData
-        notifyDataSetChanged()
-    }
 
     class MainHolder(private val binding: CardFestivalBinding) :
         RecyclerView.ViewHolder(binding.root) {

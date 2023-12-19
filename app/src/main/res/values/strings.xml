@@ -22,7 +22,7 @@
     <string name="nav_header_title">My Festival</string>
     <string name="nav_header_subtitle">Add Your Festivals</string>
     <string name="nav_header_desc">Navigation header</string>
+    <string name="festivalsNotFound">No Festivals Yet...\nAdd Your Festivals!</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>
