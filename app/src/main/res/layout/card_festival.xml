@@ -27,11 +27,25 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:textSize="30sp"
+            android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/imageIcon"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="A Title" />
+
+        <ImageView
+            android:id="@+id/favoriteIcon"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginEnd="16dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentTop="true"
+            android:contentDescription="Favorite Icon"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@android:drawable/star_big_off" />
 
         <TextView
             android:id="@+id/description"
@@ -64,6 +78,16 @@
             app:layout_constraintStart_toStartOf="@+id/date"
             app:layout_constraintTop_toBottomOf="@+id/date" />
 
+        <TextView
+            android:id="@+id/valueForMoneyLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            app:layout_constraintStart_toStartOf="@+id/date"
+            app:layout_constraintTop_toBottomOf="@+id/valueForMoney"
+            android:text="Value for Money:"
+            tools:text="Value for Money:" />
+
         <RatingBar
             android:id="@+id/accessibility"
             style="?android:attr/ratingBarStyleSmall"
@@ -72,8 +96,18 @@
             android:numStars="5"
             android:stepSize="0.5"
             android:layout_marginTop="4dp"
-            app:layout_constraintStart_toStartOf="@+id/valueForMoney"
-            app:layout_constraintTop_toBottomOf="@+id/valueForMoney" />
+            app:layout_constraintStart_toStartOf="@+id/date"
+            app:layout_constraintTop_toBottomOf="@+id/valueForMoneyLabel" />
+
+        <TextView
+            android:id="@+id/accessibilityLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            app:layout_constraintStart_toStartOf="@+id/date"
+            app:layout_constraintTop_toBottomOf="@+id/accessibility"
+            android:text="Accessibility:"
+            tools:text="Accessibility:" />
 
         <RatingBar
             android:id="@+id/familyFriendliness"
@@ -83,8 +117,18 @@
             android:numStars="5"
             android:stepSize="0.5"
             android:layout_marginTop="4dp"
-            app:layout_constraintStart_toStartOf="@+id/accessibility"
-            app:layout_constraintTop_toBottomOf="@+id/accessibility" />
+            app:layout_constraintStart_toStartOf="@+id/date"
+            app:layout_constraintTop_toBottomOf="@+id/accessibilityLabel" />
+
+        <TextView
+            android:id="@+id/familyFriendlinessLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            app:layout_constraintStart_toStartOf="@+id/date"
+            app:layout_constraintTop_toBottomOf="@+id/familyFriendliness"
+            android:text="Family Friendliness:"
+            tools:text="Family Friendliness:" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

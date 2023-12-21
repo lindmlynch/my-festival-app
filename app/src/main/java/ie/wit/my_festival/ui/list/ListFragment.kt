@@ -12,7 +12,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import ie.wit.my_festival.R
 import ie.wit.my_festival.adapters.FestivalAdapter
@@ -20,6 +22,7 @@ import ie.wit.my_festival.adapters.FestivalListener
 import ie.wit.my_festival.databinding.FragmentListBinding
 import ie.wit.my_festival.main.FestivalApp
 import ie.wit.my_festival.models.FestivalModel
+import ie.wit.my_festival.utils.SwipeToDeleteCallback
 
 class ListFragment : Fragment(), FestivalListener {
 
@@ -45,7 +48,7 @@ class ListFragment : Fragment(), FestivalListener {
         listViewModel.observableFestivalsList.observe(viewLifecycleOwner, Observer {
 
                 festivals ->
-            festivals?.let { render(festivals) }
+            festivals?.let { render(festivals as ArrayList<FestivalModel>) }
         })
 
         val fab: FloatingActionButton = fragBinding.fab
@@ -53,6 +56,16 @@ class ListFragment : Fragment(), FestivalListener {
             val action = ListFragmentDirections.actionListFragmentToFestivalFragment()
             findNavController().navigate(action)
         }
+
+        val swipeDeleteHandler = object : SwipeToDeleteCallback(requireContext()) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val adapter = fragBinding.recyclerView.adapter as FestivalAdapter
+                adapter.removeAt(viewHolder.adapterPosition)
+
+            }
+        }
+        val itemTouchDeleteHelper = ItemTouchHelper(swipeDeleteHandler)
+        itemTouchDeleteHelper.attachToRecyclerView(fragBinding.recyclerView)
 
         return root
     }
@@ -73,7 +86,7 @@ class ListFragment : Fragment(), FestivalListener {
             }     }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
-    private fun render(festivals: List<FestivalModel>) {
+    private fun render(festivals: ArrayList<FestivalModel>){
         fragBinding.recyclerView.adapter = FestivalAdapter(festivals,this)
         if (festivals.isEmpty()) {
             fragBinding.recyclerView.visibility = View.GONE

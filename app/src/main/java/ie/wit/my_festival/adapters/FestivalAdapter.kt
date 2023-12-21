@@ -13,7 +13,7 @@ interface FestivalListener {
 }
 
 class FestivalAdapter constructor(
-    private var festivals: List<FestivalModel>,
+    private var festivals: ArrayList<FestivalModel>,
     private val listener: FestivalListener? = null
 ) : RecyclerView.Adapter<FestivalAdapter.MainHolder>() {
 
@@ -31,6 +31,10 @@ class FestivalAdapter constructor(
 
     override fun getItemCount(): Int = festivals.size
 
+    fun removeAt(position: Int) {
+        festivals.removeAt(position)
+        notifyItemRemoved(position)
+    }
 
     class MainHolder(private val binding: CardFestivalBinding) :
         RecyclerView.ViewHolder(binding.root) {

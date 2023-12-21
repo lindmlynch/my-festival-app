@@ -16,7 +16,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
-import ie.wit.my_festival.helpers.showImagePicker
+import ie.wit.my_festival.utils.showImagePicker
 import ie.wit.my_festival.models.FestivalModel
 import timber.log.Timber
 import timber.log.Timber.Forest.i

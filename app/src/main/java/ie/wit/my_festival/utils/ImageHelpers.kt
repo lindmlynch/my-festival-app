@@ -1,4 +1,4 @@
-package ie.wit.my_festival.helpers
+package ie.wit.my_festival.utils
 
 import android.content.Context
 import android.content.Intent

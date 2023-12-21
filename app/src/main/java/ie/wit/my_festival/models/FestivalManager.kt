@@ -41,8 +41,8 @@ object FestivalManager : FestivalStore {
         }
     }
 
-    override fun delete(festival: FestivalModel) {
-        festivals.remove(festival)
+    override fun delete(id: Long) {
+        TODO("Not yet implemented")
     }
     fun logAll() {
         festivals.forEach{ i("${it}") }
