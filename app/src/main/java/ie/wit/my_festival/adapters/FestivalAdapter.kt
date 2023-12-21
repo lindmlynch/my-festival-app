@@ -41,7 +41,7 @@ class FestivalAdapter constructor(
             binding.date.text = festival.date
             binding.valueForMoney.rating = festival.valueForMoney
             binding.accessibility.rating = festival.accessibility
-            binding.familyFriendly.rating = festival.familyFriendly
+            binding.familyFriendliness.rating = festival.familyFriendliness
             Picasso.get().load(festival.image).resize(200, 200).into(binding.imageIcon)
 
             binding.root.setOnClickListener {

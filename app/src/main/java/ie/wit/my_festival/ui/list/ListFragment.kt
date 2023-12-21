@@ -85,7 +85,8 @@ class ListFragment : Fragment(), FestivalListener {
     }
 
     override fun onFestivalClick(festival: FestivalModel, position: Int) {
-        
+        val action = ListFragmentDirections.actionListFragmentToFestivalDetailFragment(festival.id)
+        findNavController().navigate(action)
     }
     override fun onResume() {
         super.onResume()

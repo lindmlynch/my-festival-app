@@ -56,7 +56,7 @@ class FestivalFragment : Fragment() {
                 fragBinding.date.setText(festival.date)
                 fragBinding.valueForMoney.rating = festival.valueForMoney
                 fragBinding.accessibility.rating = festival.accessibility
-                fragBinding.familyFriendly.rating = festival.familyFriendly
+                fragBinding.familyFriendliness.rating = festival.familyFriendliness
                 fragBinding.btnAdd.setText(R.string.save_festival)
                 Picasso.get().load(festival.image).into(fragBinding.festivalImage)
                 if (festival.image != Uri.EMPTY) {
@@ -78,7 +78,7 @@ class FestivalFragment : Fragment() {
             festival.date = layout.date.text.toString()
             festival.valueForMoney = layout.valueForMoney.rating
             festival.accessibility = layout.accessibility.rating
-            festival.familyFriendly = layout.familyFriendly.rating
+            festival.familyFriendliness = layout.familyFriendliness.rating
             if (festival.title.isEmpty()) {
                 Timber.i("Enter festival title")
             } else {

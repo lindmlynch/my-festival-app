@@ -118,7 +118,7 @@
                     android:text="Family-Friendliness:" />
 
                 <RatingBar
-                    android:id="@+id/familyFriendly"
+                    android:id="@+id/familyFriendliness"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_margin="8dp"

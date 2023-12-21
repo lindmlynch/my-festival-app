@@ -15,6 +15,9 @@
             app:destination="@id/festivalFragment"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim" />
+        <action
+            android:id="@+id/action_listFragment_to_festivalDetailFragment"
+            app:destination="@id/festivalDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/festivalFragment"
@@ -26,5 +29,20 @@
             app:destination="@id/listFragment"
             app:enterAnim="@anim/nav_default_enter_anim"
             app:exitAnim="@anim/nav_default_exit_anim" />
+        <action
+            android:id="@+id/action_festivalFragment_to_festivalDetailFragment"
+            app:destination="@id/listFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/festivalDetailFragment"
+        android:name="ie.wit.my_festival.ui.detail.FestivalDetailFragment"
+        android:label="Festival Details"
+        tools:layout="@layout/fragment_festival_detail" >
+        <action
+            android:id="@+id/action_festivalDetailFragment_to_festivalFragment"
+            app:destination="@id/listFragment" />
+        <argument
+            android:name="festivalid"
+            app:argType="long" />
     </fragment>
 </navigation>

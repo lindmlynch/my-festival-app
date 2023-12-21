@@ -11,5 +11,5 @@ data class FestivalModel(var id: Long = 0,
                          var date: String = "",
                          var valueForMoney: Float = 0.0f,
                          var accessibility: Float = 0.0f,
-                         var familyFriendly: Float = 0.0f,
+                         var familyFriendliness: Float = 0.0f,
                          var image: Uri = Uri.EMPTY) : Parcelable

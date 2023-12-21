@@ -16,6 +16,11 @@ object FestivalManager : FestivalStore {
         return festivals
     }
 
+    override fun findById(id:Long) : FestivalModel? {
+        val foundFestival: FestivalModel? = festivals.find { it.id == id }
+        return foundFestival
+    }
+
     override fun create(festival:FestivalModel) {
         festival.id = getId()
         festivals.add(festival)
@@ -30,7 +35,7 @@ object FestivalManager : FestivalStore {
             foundFestival.date = festival.date
             foundFestival.valueForMoney = festival.valueForMoney
             foundFestival.accessibility = festival.accessibility
-            foundFestival.familyFriendly = festival.familyFriendly
+            foundFestival.familyFriendliness = festival.familyFriendliness
             foundFestival.image = festival.image
             logAll()
         }
