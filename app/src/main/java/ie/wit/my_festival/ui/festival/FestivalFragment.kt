@@ -16,6 +16,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
+import com.google.firebase.auth.FirebaseAuth
 import ie.wit.my_festival.utils.showImagePicker
 import ie.wit.my_festival.models.FestivalModel
 import timber.log.Timber
@@ -23,27 +24,27 @@ import timber.log.Timber.Forest.i
 
 class FestivalFragment : Fragment() {
 
-
     private var _fragBinding: FragmentFestivalBinding? = null
     private val fragBinding get() = _fragBinding!!
     private lateinit var imageIntentLauncher: ActivityResultLauncher<Intent>
     private lateinit var viewModel: FestivalViewModel
+    private lateinit var auth: FirebaseAuth
 
     var festival = FestivalModel()
     var edit = false
-
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         _fragBinding = FragmentFestivalBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         viewModel = ViewModelProvider(this).get(FestivalViewModel::class.java)
         activity?.title = getString(R.string.enter_festival_title)
         setupMenu()
+
+        // Initialize Firebase Authentication
+        auth = FirebaseAuth.getInstance()
 
         if (arguments?.containsKey("festival_edit") == true) {
             edit = true
@@ -79,6 +80,12 @@ class FestivalFragment : Fragment() {
             festival.valueForMoney = layout.valueForMoney.rating
             festival.accessibility = layout.accessibility.rating
             festival.familyFriendliness = layout.familyFriendliness.rating
+
+            val currentUser = auth.currentUser
+            if (currentUser != null) {
+                festival.email = currentUser.email ?: ""
+            }
+
             if (festival.title.isEmpty()) {
                 Timber.i("Enter festival title")
             } else {
@@ -133,11 +140,13 @@ class FestivalFragment : Fragment() {
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.menu_festival, menu)
             }
+
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 // Validate and handle the selected menu item
                 return NavigationUI.onNavDestinationSelected(menuItem,
                     requireView().findNavController())
-            }     }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
     override fun onDestroyView() {
@@ -145,3 +154,4 @@ class FestivalFragment : Fragment() {
         _fragBinding = null
     }
 }
+

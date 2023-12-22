@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "211989386217",
+    "project_id": "my-festival-9172b",
+    "storage_bucket": "my-festival-9172b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:211989386217:android:4c3f435ef3c9cd18843178",
+        "android_client_info": {
+          "package_name": "ie.wit.my_festival"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJFcGr8w6Zf67ZlrTfjMpwymUqwQ-gcxg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
