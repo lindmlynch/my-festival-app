@@ -22,7 +22,7 @@ import ie.wit.my_festival.adapters.FestivalListener
 import ie.wit.my_festival.databinding.FragmentListBinding
 import ie.wit.my_festival.main.FestivalApp
 import ie.wit.my_festival.models.FestivalModel
-import ie.wit.my_festival.utils.SwipeToDeleteCallback
+import ie.wit.my_festival.utils.*
 
 class ListFragment : Fragment(), FestivalListener {
 
@@ -66,6 +66,17 @@ class ListFragment : Fragment(), FestivalListener {
         }
         val itemTouchDeleteHelper = ItemTouchHelper(swipeDeleteHandler)
         itemTouchDeleteHelper.attachToRecyclerView(fragBinding.recyclerView)
+
+        val swipeEditHandler = object : SwipeToEditCallback(requireContext()) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val adapter = fragBinding.recyclerView.adapter as FestivalAdapter
+                val position = viewHolder.adapterPosition
+                val festival = adapter.getItemAt(position)
+                festival?.let { onFestivalClick(it, position) }
+            }
+        }
+        val itemTouchEditHelper = ItemTouchHelper(swipeEditHandler)
+        itemTouchEditHelper.attachToRecyclerView(fragBinding.recyclerView)
 
         return root
     }

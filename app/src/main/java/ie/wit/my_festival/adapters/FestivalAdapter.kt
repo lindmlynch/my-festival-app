@@ -31,6 +31,14 @@ class FestivalAdapter constructor(
 
     override fun getItemCount(): Int = festivals.size
 
+    fun getItemAt(position: Int): FestivalModel? {
+        return if (position in 0 until festivals.size) {
+            festivals[position]
+        } else {
+            null
+        }
+    }
+
     fun removeAt(position: Int) {
         festivals.removeAt(position)
         notifyItemRemoved(position)
@@ -40,6 +48,7 @@ class FestivalAdapter constructor(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(festival: FestivalModel, listener: FestivalListener?) {
+            binding.root.tag = festival
             binding.festivalTitle.text = festival.title
             binding.description.text = festival.description
             binding.date.text = festival.date
