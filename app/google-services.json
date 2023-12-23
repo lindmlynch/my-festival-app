@@ -13,7 +13,12 @@
           "package_name": "ie.wit.my_festival"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "211989386217-go1flo5eiur5g0648h8qnrqv7vpo3equ.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDJFcGr8w6Zf67ZlrTfjMpwymUqwQ-gcxg"
@@ -21,7 +26,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "211989386217-go1flo5eiur5g0648h8qnrqv7vpo3equ.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
