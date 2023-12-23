@@ -14,14 +14,15 @@ interface FestivalListener {
 
 class FestivalAdapter constructor(
     private var festivals: ArrayList<FestivalModel>,
-    private val listener: FestivalListener? = null
+    private val listener: FestivalListener? = null,
+    private val readOnly: Boolean
 ) : RecyclerView.Adapter<FestivalAdapter.MainHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MainHolder {
         val binding = CardFestivalBinding
             .inflate(LayoutInflater.from(parent.context), parent, false)
 
-        return MainHolder(binding)
+        return MainHolder(binding, readOnly)
     }
 
     override fun onBindViewHolder(holder: MainHolder, position: Int) {
@@ -44,9 +45,9 @@ class FestivalAdapter constructor(
         notifyItemRemoved(position)
     }
 
-    class MainHolder(private val binding: CardFestivalBinding) :
+    class MainHolder(private val binding: CardFestivalBinding, private val readOnly : Boolean) :
         RecyclerView.ViewHolder(binding.root) {
-
+        val readOnlyRow = readOnly
         fun bind(festival: FestivalModel, listener: FestivalListener?) {
             binding.root.tag = festival
             binding.festivalTitle.text = festival.title

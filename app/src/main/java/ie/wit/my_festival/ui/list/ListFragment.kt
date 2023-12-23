@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
+import androidx.appcompat.widget.SwitchCompat
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
@@ -102,6 +103,16 @@ class ListFragment : Fragment(), FestivalListener {
 
             override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
                 menuInflater.inflate(R.menu.menu_list, menu)
+
+                val item = menu.findItem(R.id.toggleFestivals) as MenuItem
+                item.setActionView(R.layout.togglebutton_layout)
+                val toggleDonations: SwitchCompat = item.actionView!!.findViewById(R.id.toggleButton)
+                toggleDonations.isChecked = false
+
+                toggleDonations.setOnCheckedChangeListener { _, isChecked ->
+                    if (isChecked) listViewModel.loadAll()
+                    else listViewModel.load()
+                }
             }
             override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                 // Validate and handle the selected menu item
@@ -110,9 +121,10 @@ class ListFragment : Fragment(), FestivalListener {
             }     }, viewLifecycleOwner, Lifecycle.State.RESUMED)
     }
 
-    private fun render(festivals: ArrayList<FestivalModel>){
-        fragBinding.recyclerView.adapter = FestivalAdapter(festivals,this)
-        if (festivals.isEmpty()) {
+    private fun render(festivalsList: ArrayList<FestivalModel>) {
+        fragBinding.recyclerView.adapter = FestivalAdapter(festivalsList,this,
+            listViewModel.readOnly.value!!)
+        if (festivalsList.isEmpty()) {
             fragBinding.recyclerView.visibility = View.GONE
             fragBinding.festivalsNotFound.visibility = View.VISIBLE
         } else {
@@ -123,7 +135,8 @@ class ListFragment : Fragment(), FestivalListener {
 
     override fun onFestivalClick(festival: FestivalModel, position: Int) {
         val action = ListFragmentDirections.actionListFragmentToFestivalDetailFragment(festival.uid!!)
-        findNavController().navigate(action)
+        if(!listViewModel.readOnly.value!!)
+            findNavController().navigate(action)
     }
 
     override fun onResume() {

@@ -14,6 +14,7 @@ class ListViewModel : ViewModel() {
     private val festivalsList = MutableLiveData<List<FestivalModel>>()
 
     var liveFirebaseUser = MutableLiveData<FirebaseUser>()
+    var readOnly = MutableLiveData(false)
 
     val observableFestivalsList: LiveData<List<FestivalModel>>
         get() = festivalsList
@@ -24,12 +25,23 @@ class ListViewModel : ViewModel() {
 
     fun load() {
         try {
-
+            readOnly.value = false
             FirebaseDBManager.findAll(liveFirebaseUser.value?.uid!!,festivalsList)
             Timber.i("Report Load Success : ${festivalsList.value.toString()}")
         }
         catch (e: Exception) {
             Timber.i("Report Load Error : $e.message")
+        }
+    }
+
+    fun loadAll() {
+        try {
+            readOnly.value = true
+            FirebaseDBManager.findAll(festivalsList)
+            Timber.i("Report LoadAll Success : ${festivalsList.value.toString()}")
+        }
+        catch (e: Exception) {
+            Timber.i("Report LoadAll Error : $e.message")
         }
     }
 

@@ -14,7 +14,25 @@ object FirebaseDBManager : FestivalStore {
     var database: DatabaseReference = FirebaseDatabase.getInstance().reference
 
     override fun findAll(festivalsList: MutableLiveData<List<FestivalModel>>) {
-        TODO("Not yet implemented")
+        database.child("festivals")
+            .addValueEventListener(object : ValueEventListener {
+                override fun onCancelled(error: DatabaseError) {
+                    Timber.i("Firebase Festival error : ${error.message}")
+                }
+
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val localList = ArrayList<FestivalModel>()
+                    val children = snapshot.children
+                    children.forEach {
+                        val festival = it.getValue(FestivalModel::class.java)
+                        localList.add(festival!!)
+                    }
+                    database.child("festivals")
+                        .removeEventListener(this)
+
+                    festivalsList.value = localList
+                }
+            })
     }
 
     override fun findAll(userid: String, festivalsList: MutableLiveData<List<FestivalModel>>) {
