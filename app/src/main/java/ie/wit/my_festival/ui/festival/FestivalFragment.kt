@@ -1,7 +1,6 @@
 package ie.wit.my_festival.ui.festival
 
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
@@ -43,7 +42,6 @@ class FestivalFragment : Fragment() {
         activity?.title = getString(R.string.enter_festival_title)
         setupMenu()
 
-        // Initialize Firebase Authentication
         auth = FirebaseAuth.getInstance()
 
         if (arguments?.containsKey("festival_edit") == true) {
@@ -59,8 +57,9 @@ class FestivalFragment : Fragment() {
                 fragBinding.accessibility.rating = festival.accessibility
                 fragBinding.familyFriendliness.rating = festival.familyFriendliness
                 fragBinding.btnAdd.setText(R.string.save_festival)
+
                 Picasso.get().load(festival.image).into(fragBinding.festivalImage)
-                if (festival.image != Uri.EMPTY) {
+                if (festival.image != null && festival.image.isNotEmpty()) {
                     fragBinding.chooseImage.setText(R.string.change_festival_image)
                 }
             })
@@ -80,12 +79,6 @@ class FestivalFragment : Fragment() {
             festival.valueForMoney = layout.valueForMoney.rating
             festival.accessibility = layout.accessibility.rating
             festival.familyFriendliness = layout.familyFriendliness.rating
-
-            val currentUser = auth.currentUser
-            if (currentUser != null) {
-                festival.email = currentUser.email ?: ""
-            }
-
             if (festival.title.isEmpty()) {
                 Timber.i("Enter festival title")
             } else {
@@ -105,27 +98,28 @@ class FestivalFragment : Fragment() {
 
     private fun registerImagePickerCallback() {
         imageIntentLauncher =
-            registerForActivityResult(androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult())
-            { result ->
+            registerForActivityResult(androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult()) { result ->
                 when (result.resultCode) {
                     android.app.Activity.RESULT_OK -> {
                         if (result.data != null) {
                             i("Got Result ${result.data!!.data}")
 
-                            val image = result.data!!.data!!
+                            val imageUri = result.data!!.data!!
                             requireContext().contentResolver.takePersistableUriPermission(
-                                image,
+                                imageUri,
                                 Intent.FLAG_GRANT_READ_URI_PERMISSION
                             )
-                            festival.image = image
 
+                            festival.image = imageUri.toString()
                             Picasso.get().load(festival.image).into(fragBinding.festivalImage)
                             fragBinding.chooseImage.setText(R.string.change_festival_image)
                         }
                     }
                     android.app.Activity.RESULT_CANCELED -> {
+
                     }
                     else -> {
+
                     }
                 }
             }
@@ -154,4 +148,3 @@ class FestivalFragment : Fragment() {
         _fragBinding = null
     }
 }
-

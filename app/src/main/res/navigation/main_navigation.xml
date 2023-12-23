@@ -43,6 +43,6 @@
             app:destination="@id/listFragment" />
         <argument
             android:name="festivalid"
-            app:argType="long" />
+            app:argType="string" />
     </fragment>
 </navigation>

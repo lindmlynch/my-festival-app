@@ -52,7 +52,8 @@ class FestivalDetailFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        detailViewModel.getFestival(args.festivalid)
+        detailViewModel.getFestival(loggedInViewModel.liveFirebaseUser.value?.uid!!,
+            args.festivalid)
 
     }
 

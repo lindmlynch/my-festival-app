@@ -1,12 +1,15 @@
 
 package ie.wit.my_festival.ui.list
 
+import android.app.AlertDialog
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Lifecycle
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
@@ -15,22 +18,25 @@ import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import ie.wit.my_festival.R
 import ie.wit.my_festival.adapters.FestivalAdapter
 import ie.wit.my_festival.adapters.FestivalListener
 import ie.wit.my_festival.databinding.FragmentListBinding
 import ie.wit.my_festival.main.FestivalApp
 import ie.wit.my_festival.models.FestivalModel
+import ie.wit.my_festival.ui.auth.LoggedInViewModel
 import ie.wit.my_festival.utils.*
+import timber.log.Timber
 
 class ListFragment : Fragment(), FestivalListener {
 
-    lateinit var app: FestivalApp
+
     private var _fragBinding: FragmentListBinding? = null
     private val fragBinding get() = _fragBinding!!
+    lateinit var loader : AlertDialog
+    private val listViewModel: ListViewModel by activityViewModels()
+    private val loggedInViewModel : LoggedInViewModel by activityViewModels()
 
-    private lateinit var listViewModel: ListViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,29 +49,36 @@ class ListFragment : Fragment(), FestivalListener {
         _fragBinding = FragmentListBinding.inflate(inflater, container, false)
         val root = fragBinding.root
         setupMenu()
+        loader = createLoader(requireActivity())
+
         fragBinding.recyclerView.layoutManager = LinearLayoutManager(activity)
-        listViewModel = ViewModelProvider(this).get(ListViewModel::class.java)
-        listViewModel.observableFestivalsList.observe(viewLifecycleOwner, Observer {
-
-                festivals ->
-            festivals?.let { render(festivals as ArrayList<FestivalModel>) }
-        })
-
-        val fab: FloatingActionButton = fragBinding.fab
-        fab.setOnClickListener {
+        fragBinding.fab.setOnClickListener {
             val action = ListFragmentDirections.actionListFragmentToFestivalFragment()
             findNavController().navigate(action)
         }
+        showLoader(loader,"Downloading Festivals")
+        listViewModel.observableFestivalsList.observe(viewLifecycleOwner, Observer {
+                festivals ->
+            festivals?.let {
+                render(festivals as ArrayList<FestivalModel>)
+                hideLoader(loader)
+            }
+        })
 
         val swipeDeleteHandler = object : SwipeToDeleteCallback(requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                showLoader(loader,"Deleting Festival")
                 val adapter = fragBinding.recyclerView.adapter as FestivalAdapter
                 adapter.removeAt(viewHolder.adapterPosition)
+                listViewModel.delete(listViewModel.liveFirebaseUser.value?.uid!!,
+                    (viewHolder.itemView.tag as FestivalModel).uid!!)
 
+                hideLoader(loader)
             }
         }
         val itemTouchDeleteHelper = ItemTouchHelper(swipeDeleteHandler)
         itemTouchDeleteHelper.attachToRecyclerView(fragBinding.recyclerView)
+
 
         val swipeEditHandler = object : SwipeToEditCallback(requireContext()) {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
@@ -109,12 +122,20 @@ class ListFragment : Fragment(), FestivalListener {
     }
 
     override fun onFestivalClick(festival: FestivalModel, position: Int) {
-        val action = ListFragmentDirections.actionListFragmentToFestivalDetailFragment(festival.id)
+        val action = ListFragmentDirections.actionListFragmentToFestivalDetailFragment(festival.uid!!)
         findNavController().navigate(action)
     }
+
     override fun onResume() {
         super.onResume()
-        listViewModel.load()
+        showLoader(loader,"Downloading Festivals")
+        loggedInViewModel.liveFirebaseUser.observe(viewLifecycleOwner, Observer { firebaseUser ->
+            if (firebaseUser != null) {
+                listViewModel.liveFirebaseUser.value = firebaseUser
+                listViewModel.load()
+            }
+        })
+        hideLoader(loader)
     }
 
     override fun onDestroyView() {

@@ -3,8 +3,9 @@ package ie.wit.my_festival.ui.detail
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import ie.wit.my_festival.models.FestivalManager
+import ie.wit.my_festival.firebase.FirebaseDBManager
 import ie.wit.my_festival.models.FestivalModel
+import timber.log.Timber
 
 class FestivalDetailViewModel : ViewModel() {
     private val festival = MutableLiveData<FestivalModel>()
@@ -12,7 +13,14 @@ class FestivalDetailViewModel : ViewModel() {
     val observableFestival: LiveData<FestivalModel>
         get() = festival
 
-    fun getFestival(id: Long) {
-        festival.value = FestivalManager.findById(id)
+    fun getFestival(userid:String, id: String) {
+        try {
+            FirebaseDBManager.findById(userid, id, festival)
+            Timber.i("Detail getFestival() Success : ${
+                festival.value.toString()}")
+        }
+        catch (e: Exception) {
+            Timber.i("Detail getFestival() Error : $e.message")
+        }
     }
 }
