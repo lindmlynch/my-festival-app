@@ -45,4 +45,13 @@
             android:name="festivalid"
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/mapsFragment"
+        android:name="ie.wit.my_festival.ui.map.MapsFragment"
+        android:label="Map"
+        tools:layout="@layout/fragment_maps" >
+        <action
+            android:id="@+id/action_mapsFragment_to_festivalDetailFragment"
+            app:destination="@id/festivalDetailFragment" />
+    </fragment>
 </navigation>

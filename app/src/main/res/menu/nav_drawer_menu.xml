@@ -12,6 +12,11 @@
             android:id="@+id/festivalFragment"
             android:icon="@drawable/ic_menu_festival"
             android:title="@string/action_festival" />
+
+        <item
+            android:id="@+id/mapsFragment"
+            android:icon="@drawable/ic_menu_location"
+            android:title="@string/action_location" />
     </group>
 
     <item android:title="@string/group_communicate">
