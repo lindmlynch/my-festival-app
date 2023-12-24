@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import ie.wit.my_festival.firebase.FirebaseDBManager
+import ie.wit.my_festival.firebase.FirebaseImageManager
 import ie.wit.my_festival.models.FestivalModel
 
 class FestivalViewModel : ViewModel() {
