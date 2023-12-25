@@ -1,6 +1,8 @@
 package ie.wit.my_festival.ui.home
 
+import android.annotation.SuppressLint
 import android.content.Intent
+import android.location.Location
 import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
@@ -8,6 +10,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
@@ -26,7 +29,10 @@ import ie.wit.my_festival.databinding.NavHeaderBinding
 import ie.wit.my_festival.firebase.FirebaseImageManager
 import ie.wit.my_festival.ui.auth.LoggedInViewModel
 import ie.wit.my_festival.ui.auth.Login
+import ie.wit.my_festival.ui.map.MapsViewModel
+import ie.wit.my_festival.utils.checkLocationPermissions
 import ie.wit.my_festival.utils.customTransformation
+import ie.wit.my_festival.utils.isPermissionGranted
 import ie.wit.my_festival.utils.readImageUri
 import ie.wit.my_festival.utils.showImagePicker
 import timber.log.Timber
@@ -40,6 +46,7 @@ class Home : AppCompatActivity() {
     private lateinit var loggedInViewModel : LoggedInViewModel
     private lateinit var headerView : View
     private lateinit var intentLauncher : ActivityResultLauncher<Intent>
+    private val mapsViewModel : MapsViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,6 +69,10 @@ class Home : AppCompatActivity() {
         val navView = homeBinding.navView
         navView.setupWithNavController(navController)
         initNavHeader()
+
+        if(checkLocationPermissions(this)) {
+            mapsViewModel.updateCurrentLocation()
+        }
 
     }
 
@@ -148,6 +159,21 @@ class Home : AppCompatActivity() {
                     RESULT_CANCELED -> { } else -> { }
                 }
             }
+    }
+
+    @SuppressLint("MissingPermission")
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (isPermissionGranted(requestCode, grantResults))
+            mapsViewModel.updateCurrentLocation()
+        else {
+            // permissions denied, so use a default location
+            mapsViewModel.currentLocation.value = Location("Default").apply {
+                latitude = 53.3498
+                longitude = -6.2603
+            }
+        }
+        Timber.i("LOC : %s", mapsViewModel.currentLocation.value)
     }
 
     fun signOut(item: MenuItem) {

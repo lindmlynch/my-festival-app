@@ -18,7 +18,9 @@ data class FestivalModel(
     var accessibility: Float = 0.0f,
     var familyFriendliness: Float = 0.0f,
     var image: String = "",
-    var email: String = ""
+    var email: String = "",
+    var latitude: Double = 0.0,
+    var longitude: Double = 0.0
 ) : Parcelable {
 
     @Exclude
@@ -32,7 +34,9 @@ data class FestivalModel(
             "accessibility" to accessibility,
             "familyFriendliness" to familyFriendliness,
             "image" to image,
-            "email" to email
+            "email" to email,
+            "latitude" to latitude,
+            "longitude" to longitude
         )
     }
 }

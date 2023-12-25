@@ -11,6 +11,7 @@ import ie.wit.my_festival.databinding.FragmentFestivalBinding
 import androidx.activity.result.ActivityResultLauncher
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
@@ -18,6 +19,7 @@ import androidx.navigation.ui.NavigationUI
 import com.google.firebase.auth.FirebaseAuth
 import ie.wit.my_festival.utils.showImagePicker
 import ie.wit.my_festival.models.FestivalModel
+import ie.wit.my_festival.ui.map.MapsViewModel
 import timber.log.Timber
 import timber.log.Timber.Forest.i
 
@@ -28,6 +30,7 @@ class FestivalFragment : Fragment() {
     private lateinit var imageIntentLauncher: ActivityResultLauncher<Intent>
     private lateinit var viewModel: FestivalViewModel
     private lateinit var auth: FirebaseAuth
+    private val mapsViewModel: MapsViewModel by activityViewModels()
 
     var festival = FestivalModel()
     var edit = false
@@ -79,6 +82,9 @@ class FestivalFragment : Fragment() {
             festival.valueForMoney = layout.valueForMoney.rating
             festival.accessibility = layout.accessibility.rating
             festival.familyFriendliness = layout.familyFriendliness.rating
+
+            festival.latitude = mapsViewModel.currentLocation.value!!.latitude
+            festival.longitude = mapsViewModel.currentLocation.value!!.longitude
             if (festival.title.isEmpty()) {
                 Timber.i("Enter festival title")
             } else {
