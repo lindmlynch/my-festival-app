@@ -58,4 +58,6 @@ We aimed to simplify the development process for contributors and maintainers. K
 - Placemark and DonationX case studies
 
 ---
+## Class Diagram
 
+![Class Diagram](myfestivaluml.png)
