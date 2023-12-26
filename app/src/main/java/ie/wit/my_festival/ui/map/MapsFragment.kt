@@ -52,7 +52,7 @@ class MapsFragment : Fragment() {
                 mapsViewModel.currentLocation.value!!.longitude
             )
 
-            mapsViewModel.map.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, 14f))
+            mapsViewModel.map.moveCamera(CameraUpdateFactory.newLatLngZoom(loc, 8f))
             mapsViewModel.map.uiSettings.isZoomControlsEnabled = true
             mapsViewModel.map.uiSettings.isMyLocationButtonEnabled = true
 
