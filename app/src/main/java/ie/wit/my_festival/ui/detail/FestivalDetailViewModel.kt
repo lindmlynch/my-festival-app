@@ -23,4 +23,15 @@ class FestivalDetailViewModel : ViewModel() {
             Timber.i("Detail getFestival() Error : $e.message")
         }
     }
+
+    fun updateFestival(userid:String, id: String,festival: FestivalModel) {
+        try {
+
+            FirebaseDBManager.update(userid, id, festival)
+            Timber.i("Detail update() Success : $festival")
+        }
+        catch (e: Exception) {
+            Timber.i("Detail update() Error : $e.message")
+        }
+    }
 }

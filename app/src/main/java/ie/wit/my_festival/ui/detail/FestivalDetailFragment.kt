@@ -8,9 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import ie.wit.my_festival.databinding.FragmentFestivalDetailBinding
 import ie.wit.my_festival.ui.auth.LoggedInViewModel
+import ie.wit.my_festival.ui.list.ListViewModel
 import timber.log.Timber
 
 
@@ -20,6 +22,7 @@ class FestivalDetailFragment : Fragment() {
     private val args by navArgs<FestivalDetailFragmentArgs>()
     private var _fragBinding: FragmentFestivalDetailBinding? = null
     private val loggedInViewModel : LoggedInViewModel by activityViewModels()
+    private val listViewModel : ListViewModel by activityViewModels()
     private val fragBinding get() = _fragBinding!!
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -31,11 +34,22 @@ class FestivalDetailFragment : Fragment() {
         detailViewModel = ViewModelProvider(this).get(FestivalDetailViewModel::class.java)
         detailViewModel.observableFestival.observe(viewLifecycleOwner, Observer { render() })
 
+        fragBinding.editFestivalButton.setOnClickListener {
+            detailViewModel.updateFestival(loggedInViewModel.liveFirebaseUser.value?.uid!!,
+                args.festivalid, fragBinding.festivalvm?.observableFestival!!.value!!)
+            findNavController().navigateUp()
+        }
+
+        fragBinding.deleteFestivalButton.setOnClickListener {
+            listViewModel.delete(loggedInViewModel.liveFirebaseUser.value?.email!!,
+                detailViewModel.observableFestival.value?.uid!!)
+            findNavController().navigateUp()
+        }
+
         return root
     }
 
     private fun render() {
-
         val currentFestival = detailViewModel.observableFestival.value ?: return
 
         fragBinding.festivalTitle.setText(currentFestival.title)

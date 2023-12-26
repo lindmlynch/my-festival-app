@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
@@ -33,51 +32,44 @@
                 app:titleTextColor="@color/color_primary" />
         </com.google.android.material.appbar.AppBarLayout>
 
-        <ScrollView
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            app:layout_constraintTop_toBottomOf="@id/appBarLayout"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent">
+        <EditText
+            android:id="@+id/festivalTitle"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="@string/hint_festivalTitle"
+            android:inputType="text"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:padding="8dp"
+            android:layout_marginTop="16dp"
+            app:layout_constraintTop_toBottomOf="@+id/appBarLayout"
+            android:text="@={festivalvm.observableFestival.title}" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="8dp">
+        <EditText
+            android:id="@+id/description"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/hint_festivalDescription"
+            android:inputType="text"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:padding="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/festivalTitle"
+            android:text="@={festivalvm.observableFestival.description}" />
 
-                <EditText
-                    android:id="@+id/festivalTitle"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:hint="@string/hint_festivalTitle"
-                    android:inputType="text"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    android:padding="8dp"/>
-
-                <EditText
-                    android:id="@+id/description"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/hint_festivalDescription"
-                    android:inputType="text"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    android:padding="8dp"
-                    android:layout_marginTop="8dp"/>
-
-                <EditText
-                    android:id="@+id/date"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:hint="@string/hint_festivalDate"
-                    android:inputType="date"
-                    android:textColor="@color/black"
-                    android:textSize="14sp"
-                    android:padding="8dp"
-                    android:layout_marginTop="8dp"/>
+        <EditText
+            android:id="@+id/date"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:hint="@string/hint_festivalDate"
+            android:inputType="date"
+            android:textColor="@color/black"
+            android:textSize="14sp"
+            android:padding="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintTop_toBottomOf="@+id/description"
+            android:text="@={festivalvm.observableFestival.date}" />
 
         <TextView
             android:id="@+id/valueForMoney"
@@ -85,8 +77,8 @@
             android:layout_height="wrap_content"
             android:text="@string/valueForMoney"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/date"
-            android:layout_marginTop="16dp"/>
+            app:layout_constraintTop_toBottomOf="@+id/date"
+            android:layout_marginTop="16dp" />
 
         <RatingBar
             android:id="@+id/valueForMoneyEditable"
@@ -95,8 +87,8 @@
             android:numStars="5"
             android:rating="@={festivalvm.observableFestival.valueForMoney}"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/valueForMoney"
-            android:layout_marginTop="8dp"/>
+            app:layout_constraintTop_toBottomOf="@+id/valueForMoney"
+            android:layout_marginTop="8dp" />
 
         <TextView
             android:id="@+id/accessibility"
@@ -104,8 +96,8 @@
             android:layout_height="wrap_content"
             android:text="@string/accessibility"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/valueForMoneyEditable"
-            android:layout_marginTop="16dp"/>
+            app:layout_constraintTop_toBottomOf="@+id/valueForMoneyEditable"
+            android:layout_marginTop="16dp" />
 
         <RatingBar
             android:id="@+id/accessibilityEditable"
@@ -114,8 +106,8 @@
             android:numStars="5"
             android:rating="@={festivalvm.observableFestival.accessibility}"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/accessibility"
-            android:layout_marginTop="8dp"/>
+            app:layout_constraintTop_toBottomOf="@+id/accessibility"
+            android:layout_marginTop="8dp" />
 
         <TextView
             android:id="@+id/familyFriendliness"
@@ -123,8 +115,8 @@
             android:layout_height="wrap_content"
             android:text="@string/familyFriendliness"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/accessibilityEditable"
-            android:layout_marginTop="16dp"/>
+            app:layout_constraintTop_toBottomOf="@+id/accessibilityEditable"
+            android:layout_marginTop="16dp" />
 
         <RatingBar
             android:id="@+id/familyFriendlinessEditable"
@@ -133,30 +125,28 @@
             android:numStars="5"
             android:rating="@={festivalvm.observableFestival.familyFriendliness}"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/familyFriendliness"
-            android:layout_marginTop="8dp"/>
+            app:layout_constraintTop_toBottomOf="@+id/familyFriendliness"
+            android:layout_marginTop="8dp" />
 
         <Button
-            android:id="@+id/editDonationButton"
+            android:id="@+id/editFestivalButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Edit"
+            android:text="@string/menu_editFestival"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/deleteDonationButton"
+            app:layout_constraintEnd_toStartOf="@+id/deleteFestivalButton"
             app:layout_constraintHorizontal_chainStyle="packed"
             app:layout_constraintStart_toStartOf="parent" />
 
         <Button
-            android:id="@+id/deleteDonationButton"
+            android:id="@+id/deleteFestivalButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Delete"
+            android:text="@string/menu_deleteFestival"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/editDonationButton" />
+            app:layout_constraintStart_toEndOf="@+id/editFestivalButton" />
 
-        </LinearLayout>
-        </ScrollView>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
