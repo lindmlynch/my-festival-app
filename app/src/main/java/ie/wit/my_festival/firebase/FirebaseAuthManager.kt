@@ -60,11 +60,12 @@ class FirebaseAuthManager(application: Application) {
 
                 } else {
                     // If sign in fails, display a message to the user.
-                    Timber.i( "signInWithCredential:failure $task.exception")
+                    Timber.i( "signInWithCredential:failure ${task.exception?.message}")
                     errorStatus.postValue(true)
                 }
             }
     }
+
 
     fun login(email: String?, password: String?) {
         firebaseAuth!!.signInWithEmailAndPassword(email!!, password!!)
