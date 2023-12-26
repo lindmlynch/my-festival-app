@@ -46,6 +46,8 @@ We aimed to simplify the development process for contributors and maintainers. K
 
 - **Code Quality**: The project adheres to best coding practices and follows a consistent coding style, ensuring maintainability and readability.
 
+- **MVVM**: MVVM design pattern adhered to.
+
 
 
 ## References/Acknowledgemnents
